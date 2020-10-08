@@ -1,0 +1,101 @@
+﻿@model WebApplication1.Models.IndexViewModel
+@using PagedList.Mvc
+@Styles.Render("~/Styles/Index.css")
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+
+@{
+    ViewBag.Title = "Appointment Index";
+}
+
+<link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css" rel="stylesheet" type='text/css'>
+@section scripts{
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+    <script>
+        $(function () {
+            $(".datepicker").datepicker({
+                dateFormat: "dd/mm/yy",
+                changeYear: true,
+                changeMonth: true,
+                minDate: new Date(2010, 0, 1),
+                maxDate: new Date(2021, 0, 1),
+                showOn: "both",
+                buttonText: "<i class='fa fa-calendar'></i>"
+            });
+        })
+    </script>
+}
+
+<div class="searchBar">
+    @using (Html.BeginForm("Index", "Home", FormMethod.Get))
+    {
+        <ul>
+            <li>Find by pet name: @Html.TextBox("searchString", ViewBag.CurrentFilter as string)</li>
+            <li class="dateRange">
+                <span>From: @Html.TextBox("startDate", ViewBag.CurrentStartDate as string, new { @class = "datepicker" })</span>
+                &nbsp;
+                <span>To: @Html.TextBox("endDate", ViewBag.CurrentEndtDate as string, new { @class = "datepicker" })</span>
+            </li>
+            <li>
+                <input class="searchButton" type="submit" value="Search" />
+            </li>
+        </ul>
+    }
+</div>
+@{int tail = ViewBag.head + Model.appointmentsViewModelsList.Count-1;}
+<p style="text-align:end">@ViewBag.head-@tail of @ViewBag.ResultCount</p>
+<div class="dataTable">
+    <table>
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.appointmentsViewModel.appointmentDateTime)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.appointmentsViewModel.petName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.appointmentsViewModel.ownerName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.appointmentsViewModel.contactDetails)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.appointmentsViewModelsList)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.appointmentDateTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.petName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ownerName)
+                    </td>
+                    <td>
+                        @foreach (var contact in item.contactDetails)
+                        {
+                            @Html.DisplayFor(modelItem => contact)<br />
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="page">
+    <p>Page @(Model.appointmentsViewModelsList.PageCount < Model.appointmentsViewModelsList.PageNumber ? 0 : Model.appointmentsViewModelsList.PageNumber) of @Model.appointmentsViewModelsList.PageCount</p>
+    @Html.PagedListPager(Model.appointmentsViewModelsList, page => Url.Action("Index",
+new {
+    page, currentFilter = ViewBag.CurrentFilter,
+    currentStartDate = ViewBag.currentStartDate,
+    currentEndDate = ViewBag.currentEndDate,
+    head = tail+1,
+    }))
+</div>
+
+

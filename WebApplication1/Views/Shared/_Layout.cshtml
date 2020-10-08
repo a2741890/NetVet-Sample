@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Styles/Layout.css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <nav class="menu">
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <a id="menubtn" class="toggle-nav" href="#">☰</a>
+                    @Html.ActionLink("Vet Appointment", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                </div>
+            </div>
+        </div>
+        <ul id="menuUI" class="Close">
+            <li class="sidedrawer-top"></li>
+            <li class="navbar-brand">Vet Appointment</li>
+            <li>
+                @Html.ActionLink("Index", "Index", "Home", new { area = "" }, new { @class = "sidedrawer-index" })
+            </li>
+        </ul>
+    </nav>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - Victorion Coding Test</p>
+        </footer>
+    </div>
+    <div id="backDrop" class="backDrop hide">
+
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+    <script type='text/javascript'>
+        document.getElementById('menubtn').addEventListener('click', function (e) {
+            $('#menuUI').toggleClass('Close').toggleClass('Open');
+            $('#backDrop').toggleClass('hide');
+        });
+        document.getElementById('backDrop').addEventListener('click', function (e) {
+            $('#menuUI').toggleClass('Open').toggleClass('Close');
+            $('#backDrop').toggleClass('hide');
+        });
+    </script>
+</body>
+</html>
