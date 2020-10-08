@@ -1,0 +1,79 @@
+﻿.searchBar {
+    border: 1px solid rgba(0,0,0,.12);
+    border-radius: 4px;
+    padding: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+}
+
+ul {
+    list-style-type: none;
+}
+
+li {
+    margin: 20px 2px;
+}
+
+
+.datepicker {
+    width: 100px;
+}
+
+.dataTable {
+    border: 1px solid rgba(0,0,0,.12);
+    border-radius: 4px;
+    height: 500px;
+    overflow-y: auto;
+}
+
+
+    .dataTable thead th {
+        position: sticky;
+        top: 0;
+    }
+
+    .dataTable thead tr {
+        width: 100%
+    }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+
+th, td {
+    padding: 8px 16px;
+}
+
+th {
+    background-color: #222;
+    color:#9d9d9d;
+}
+
+tbody tr {
+    border-top-width: 1px;
+    border-top-style: solid;
+    border-top-color: rgba(0,0,0,.12);
+}
+
+
+
+tr:hover {
+    background-color: aliceblue;
+}
+
+.page {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+@media(max-width: 768px ){
+    .dateRange{
+        display: flex;
+        flex-direction: column;
+    }
+}
