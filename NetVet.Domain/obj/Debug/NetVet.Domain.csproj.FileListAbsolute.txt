@@ -17,7 +17,6 @@ C:\Users\USER\Downloads\NetVet Sample\NetVet.Domain\bin\Debug\Moq.pdb
 C:\Users\USER\Downloads\NetVet Sample\NetVet.Domain\bin\Debug\Moq.xml
 C:\Users\USER\Downloads\NetVet Sample\NetVet.Domain\bin\Debug\System.Threading.Tasks.Extensions.xml
 C:\Users\USER\Downloads\NetVet Sample\NetVet.Domain\bin\Debug\System.ValueTuple.xml
-C:\Users\USER\Downloads\NetVet Sample\NetVet.Domain\obj\Debug\NetVet.Domain.csprojAssemblyReference.cache
 C:\Users\USER\Downloads\NetVet Sample\NetVet.Domain\obj\Debug\NetVet.Domain.csproj.CoreCompileInputs.cache
 C:\Users\USER\Downloads\NetVet Sample\NetVet.Domain\obj\Debug\NetVet.Domain.csproj.CopyComplete
 C:\Users\USER\Downloads\NetVet Sample\NetVet.Domain\obj\Debug\NetVet.Domain.dll

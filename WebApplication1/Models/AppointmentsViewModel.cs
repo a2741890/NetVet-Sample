@@ -20,7 +20,7 @@ namespace WebApplication1.Models
         public DateTime appointmentDateTime { get; set; }
 
         [DisplayName("Contact Details")]
-        public IEnumerable<string> contactDetails { get; set; }
+        public string contactDetail { get; set; }
 
     }
 

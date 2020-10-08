@@ -58,7 +58,7 @@
                     @Html.DisplayNameFor(model => model.appointmentsViewModel.ownerName)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.appointmentsViewModel.contactDetails)
+                    @Html.DisplayNameFor(model => model.appointmentsViewModel.contactDetail)
                 </th>
             </tr>
         </thead>
@@ -76,10 +76,7 @@
                         @Html.DisplayFor(modelItem => item.ownerName)
                     </td>
                     <td>
-                        @foreach (var contact in item.contactDetails)
-                        {
-                            @Html.DisplayFor(modelItem => contact)<br />
-                        }
+                        @Html.DisplayFor(modelItem => item.contactDetail)
                     </td>
                 </tr>
             }

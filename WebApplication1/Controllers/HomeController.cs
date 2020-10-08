@@ -5,30 +5,31 @@ using System.Web;
 using System.Web.Mvc;
 using NetVet.Domain.Repositories;
 using NetVet.Domain.Entities;
-using WebApplication1.Models;
 using PagedList;
 using System.Globalization;
+using NetVet.Service;
+using WebApplication1.Models;
+using Mehdime.Entity;
 
 namespace WebApplication1.Controllers
 {
     public class HomeController : Controller
     {
-        private IAppointmentRepository mockAppointmentRepository = null;
-
+        private IAppointmentSearchService appointmentSearchService = null;
         public HomeController()
         {
-            this.mockAppointmentRepository = new MockAppointmentRepository();
+            var dbContextScopeFactory = new DbContextScopeFactory();
+            var mockAppointmentRepository = new MockAppointmentRepository();
+
+            this.appointmentSearchService = new AppointmentSearchService(dbContextScopeFactory, mockAppointmentRepository);
         }
-        public HomeController(MockAppointmentRepository mockAppointmentRepository)
+        public HomeController(IAppointmentSearchService appointmentSearchService)
         {
-            this.mockAppointmentRepository = mockAppointmentRepository;
+            this.appointmentSearchService = appointmentSearchService;
         }
 
         public ActionResult Index(string searchString, string startDate, string endDate, string currentFilter, string currentStartDate, string currentEndDate, int? page, int? head)
         {
-            IQueryable<Appointment> appointments = mockAppointmentRepository.GetAppointments(false);
-
-            var appointmentList = appointments.ToList();
 
             if (searchString != null)
                 page = 1;
@@ -45,48 +46,35 @@ namespace WebApplication1.Controllers
                 endDate = currentEndDate;
             }
 
-
             ViewBag.CurrentFilter = searchString;
             ViewBag.CurrentStartDate = startDate;
-            ViewBag.CurrentEndDate= endDate;
+            ViewBag.CurrentEndDate = endDate;
 
-            if (!String.IsNullOrEmpty(searchString))
-                appointmentList = appointmentList.Where(a => a.Pet.Name.ToUpper().Contains(searchString.ToUpper())).ToList();
-
-            if (!String.IsNullOrEmpty(startDate) )
-                appointmentList = appointmentList.Where(a => a.AppointmentDateTime >= DateTime.ParseExact(startDate, "dd/MM/yyyy", CultureInfo.InstalledUICulture)).ToList();
-
-            if (!String.IsNullOrEmpty(endDate))
-                appointmentList = appointmentList.Where(a => a.AppointmentDateTime <= DateTime.ParseExact(endDate, "dd/MM/yyyy", CultureInfo.InstalledUICulture).AddHours(11).AddMinutes(59)).ToList();
+            var appointmentList = appointmentSearchService.FilterAppointment(searchString, startDate, endDate);
 
             ViewBag.ResultCount = appointmentList.Count;
             ViewBag.head = head ?? 1;
             int pageSize = 25;
             int pageNumber = (page ?? 1);
 
-            IndexViewModel indeViewModel = new IndexViewModel
+            IndexViewModel indexViewModel = new IndexViewModel
             {
-                appointmentsViewModel=null,
-                appointmentsViewModelsList = appointmentList.OrderByDescending(a => a.AppointmentDateTime)
+                appointmentsViewModel = null,
+                appointmentsViewModelsList = appointmentList.OrderByDescending(a => a.AppointmentDate)
             .Select(a =>
             {
-                var pet = a.Pet;
-                var owner = pet.Owner;
                 return (
                         new AppointmentsViewModel
                         {
-                            appointmentDateTime = a.AppointmentDateTime,
-                            ownerName = owner.PreferredName ?? $"{owner.FirstName} {owner.LastName}",
-                            petName = pet.Name,
-                            contactDetails = owner.Contacts.Select(c =>
-                            {
-                                return $"{c.ContactType}: {c.ContactData} {(c.IsPreferred ? "(Preferred)" : "")}";
-                            })
+                            appointmentDateTime = a.AppointmentDate,
+                            ownerName = a.OwnerName,
+                            petName = a.PetName,
+                            contactDetail = a.ContactData
                         });
             }).ToPagedList(pageNumber, pageSize)
             };
-            
-            return View(indeViewModel);
+
+            return View(indexViewModel);
         }
     }
 }
